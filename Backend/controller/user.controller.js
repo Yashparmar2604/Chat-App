@@ -1,9 +1,27 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import createTokenAndSaveCookie from "../jwt/generateToken.js";
+import ImageKit from "imagekit";
+import fs from "fs/promises";
+
+import dotenv from "dotenv"
+dotenv.config();
+
+
+
+
+
+
+
+const imagekit = new ImageKit({
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+});
+
 export const signup = async (req, res) => {
   const { fullname, email, password, confirmPassword } = req.body;
-  const photo = req.file? req.file.filename :"";
+  let photoUrl="";
   try {
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords do not match" });
@@ -12,13 +30,27 @@ export const signup = async (req, res) => {
     if (user) {
       return res.status(400).json({ error: "User already registered" });
     }
+
+      if (req.file) {
+      const fileBuffer = await fs.readFile(req.file.path);
+      const uploadResponse = await imagekit.upload({
+        file: fileBuffer,
+        fileName: req.file.originalname,
+        folder: "/chat-app-users",
+      });
+      photoUrl = uploadResponse.url;
+      // Optionally, delete the local file after upload
+      await fs.unlink(req.file.path);
+    }
+
+
     // Hashing the password
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await new User({
       fullname,
       email,
       password: hashPassword,
-      photo
+      photo:photoUrl
     });
     await newUser.save();
     if (newUser) {
