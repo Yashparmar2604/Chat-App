@@ -17,12 +17,20 @@ function User({ user }) {
       <div className="flex space-x-4 px-8 py-3 hover:bg-slate-700 duration-300 cursor-pointer">
         <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className="w-12 rounded-full">
-            <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+            <img
+              src={
+                user.photo
+                  ? `http://localhost:4002/uploads/${user.photo}`
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullname)}&background=25D366&color=fff&rounded=true&size=128`
+              }
+              alt={user.fullname}
+            />
           </div>
         </div>
         <div>
+          {console.log(user)}
           <h1 className=" font-bold">{user.fullname}</h1>
-          <span>{user.email}</span>
+          <span>{user.fullname}</span>
         </div>
       </div>
     </div>

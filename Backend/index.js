@@ -8,27 +8,36 @@ import userRoute from "./routes/user.route.js";
 import messageRoute from "./routes/message.route.js";
 import { app, server } from "./SocketIO/server.js";
 
+
 dotenv.config();
 
 // middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use('/uploads',express.static('uploads'));
 
-const PORT = 8080;
-const URI = "mongodb://localhost:27017/test2"
+const PORT = process.env.PORT;
+const URI = process.env.MONGODB_URI;
 
-try {
-    mongoose.connect(URI);
+
+
+mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
     console.log("Connected to MongoDB");
-} catch (error) {
-    console.log(error);
-}
+    server.listen(PORT, () => {
+      console.log(`Server is Running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log("MongoDB connection error:", error);
+  });
+
+
+
+
 
 //routes
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
 
-server.listen(8080, () => {
-    console.log(`Server is Running on port ${PORT}`);
-});

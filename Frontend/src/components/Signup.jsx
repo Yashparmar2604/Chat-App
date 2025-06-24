@@ -29,8 +29,19 @@ function Signup() {
       confirmPassword: data.confirmPassword,
     };
     // console.log(userInfo);
+    const formData = new FormData();
+    Object.entries(userInfo).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    if (data.photo && data.photo[0]) {
+      formData.append("photo", data.photo[0]);
+    }
     await axios
-      .post("/api/user/signup", userInfo)
+      .post("/api/user/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         if (response.data) {
           toast.success("Signup successful");
@@ -50,6 +61,7 @@ function Signup() {
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="border border-white px-6 py-2 rounded-md space-y-3 w-96"
+          encType="multipart/form-data"
         >
           <h1 className="text-2xl text-center">
             Chat<span className="text-green-500 font-semibold">App</span>
@@ -153,6 +165,12 @@ function Signup() {
               })}
             />
           </label>
+
+          <label className="input input-bordered flex items-center gap-2">
+            <input type="file" accept="image/*" {...register("photo")} />
+            <span className="text-gray-400 text-xs">(Optional)</span>
+          </label>
+
           {errors.confirmPassword && (
             <span className="text-red-500 text-sm font-semibold">
               {errors.confirmPassword.message}
