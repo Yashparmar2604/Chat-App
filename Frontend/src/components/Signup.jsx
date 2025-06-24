@@ -37,7 +37,7 @@ function Signup() {
       formData.append("photo", data.photo[0]);
     }
     await axios
-      .post("/api/user/signup", formData, {
+      .post(`${import.meta.env.VITE_BACKEND_URL}/api/user/signup`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
