@@ -1,7 +1,11 @@
 # Node.js dependencies
 node_modules/
+
+# Build output
 dist/
 dist-ssr/
+build/
+coverage/
 
 # Logs
 logs/
@@ -24,10 +28,6 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-# Build output
-build/
-coverage/
-
 # OS generated files
 Thumbs.db
 ehthumbs.db
@@ -38,6 +38,9 @@ $RECYCLE.BIN/
 .tailwind/
 postcss.config.js
 
-# React/Vite specific
+# Vite cache
 .vite/
 *.local
+
+# Ignore uploads if not using local storage
+uploads/
