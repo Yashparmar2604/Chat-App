@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import path from "path"
 
 
 import userRoute from "./routes/user.route.js";
@@ -15,6 +16,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(express.static(path.join(process.cwd(), "dist")));
 
 
 const PORT = process.env.PORT;
@@ -38,6 +40,9 @@ mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "dist", "index.html"));
+});
 
 //routes
 app.use("/api/user", userRoute);
