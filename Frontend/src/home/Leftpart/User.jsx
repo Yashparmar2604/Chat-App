@@ -20,7 +20,7 @@ function User({ user }) {
             <img
               src={
                 user.photo
-                  ? `http://localhost:4002/uploads/${user.photo}`
+                  ? user.photo
                   : `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullname)}&background=25D366&color=fff&rounded=true&size=128`
               }
               alt={user.fullname}
