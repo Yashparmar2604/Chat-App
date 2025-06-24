@@ -40,9 +40,6 @@ mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "dist", "index.html"));
-});
 
 //routes
 app.use("/api/user", userRoute);
