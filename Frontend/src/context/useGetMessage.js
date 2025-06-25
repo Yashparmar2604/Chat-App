@@ -10,8 +10,14 @@ const useGetMessage = () => {
       setLoading(true);
       if (selectedConversation && selectedConversation._id) {
         try {
+          const token = localStorage.getItem("token");
           const res = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/api/message/get/${selectedConversation._id}`
+            `${import.meta.env.VITE_BACKEND_URL}/api/message/get/${selectedConversation._id}`,
+            {
+              headers:{
+                Authorization:`Bearer ${token}`,
+              }
+            }
           );
           setMessage(res.data);
           setLoading(false);

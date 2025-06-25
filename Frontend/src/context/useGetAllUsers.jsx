@@ -8,7 +8,7 @@ function useGetAllUsers() {
     const getUsers = async () => {
       setLoading(true);
       try {
-        const token = Cookies.get("jwt");
+        const token = localStorage.getItem("token");
         const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/allUsers`, {
           credentials: "include",
           headers: {

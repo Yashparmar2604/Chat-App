@@ -7,9 +7,17 @@ const useSendMessage = () => {
   const sendMessages = async (message) => {
     setLoading(true);
     try {
+      const token = localStorage.getItem("token");
       const res = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/message/send/${selectedConversation._id}`,
-        { message }
+        `${import.meta.env.VITE_BACKEND_URL}/api/message/send/${
+          selectedConversation._id
+        }`,
+        { message },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setMessage([...messages, res.data]);
       setLoading(false);
