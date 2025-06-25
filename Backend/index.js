@@ -13,9 +13,12 @@ import { app, server } from "./SocketIO/server.js";
 dotenv.config();
 
 // middleware
-app.use(express.json());
+app.use(express.json({limit:"10mb"}));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+   origin:"*",
+   credentials:true,
+}));
 app.use(express.static(path.join(process.cwd(), "dist")));
 
 

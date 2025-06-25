@@ -21,8 +21,16 @@ const imagekit = new ImageKit({
 
 export const signup = async (req, res) => {
   const { fullname, email, password, confirmPassword } = req.body;
+
+  
+
   let photoUrl="";
   try {
+
+    if (!fullname || !email || !password || !confirmPassword) {
+  return res.status(400).json({ error: "All fields are required" });
+}
+
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords do not match" });
     }
@@ -31,16 +39,13 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "User already registered" });
     }
 
-      if (req.file) {
-      const fileBuffer = await fs.readFile(req.file.path);
+     if (photoUrl) {
       const uploadResponse = await imagekit.upload({
-        file: fileBuffer,
-        fileName: req.file.originalname,
+        file: photoUrl, // base64 string
+        fileName: `${fullname.replace(/\s/g, "_")}_${Date.now()}.jpg`,
         folder: "/chat-app-users",
       });
       photoUrl = uploadResponse.url;
-      // Optionally, delete the local file after upload
-      await fs.unlink(req.file.path);
     }
 
 

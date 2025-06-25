@@ -27,21 +27,19 @@ function Signup() {
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
+      photo: "",
     };
-    // console.log(userInfo);
-    const formData = new FormData();
-    Object.entries(userInfo).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
+    console.log(userInfo);
+  ;
     if (data.photo && data.photo[0]) {
-      formData.append("photo", data.photo[0]);
+      const file=data.photo[0];
+      userInfo.photo = await toBase64(file);
     }
+
+   
+    console.log(userInfo);
     await axios
-      .post(`${import.meta.env.VITE_BACKEND_URL}/api/user/signup`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(`${import.meta.env.VITE_BACKEND_URL}/api/user/signup`, userInfo)
       .then((response) => {
         if (response.data) {
           toast.success("Signup successful");
@@ -56,6 +54,17 @@ function Signup() {
         }
       });
   };
+
+  function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+
   return (
     <>
       <div className="flex h-screen items-center justify-center">
