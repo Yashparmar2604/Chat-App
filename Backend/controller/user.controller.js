@@ -39,6 +39,14 @@ export const signup = async (req, res) => {
       return res.status(400).json({ error: "User already registered" });
     }
 
+    const username=await User.findOne({ fullname});
+
+     if (username) {
+      return res.status(400).json({ error: "User Name already exits" });
+    }
+
+
+
      if (photoUrl) {
       const uploadResponse = await imagekit.upload({
         file: photoUrl, // base64 string
